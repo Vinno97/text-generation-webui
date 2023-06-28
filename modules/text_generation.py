@@ -21,6 +21,7 @@ from modules.logging_colors import logger
 from modules.models import clear_torch_cache, local_rank
 
 
+@wrap_method
 def generate_reply(*args, **kwargs):
     shared.generation_lock.acquire()
     try:

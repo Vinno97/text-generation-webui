@@ -4,6 +4,7 @@ import gradio as gr
 import torch
 
 from modules import shared
+from modules.extensions import wrap_method
 
 with open(Path(__file__).resolve().parent / '../css/main.css', 'r') as f:
     css = f.read()
@@ -36,7 +37,7 @@ def list_model_elements():
 
     return elements
 
-
+@wrap_method
 def list_interface_input_elements(chat=False):
     elements = ['max_new_tokens', 'seed', 'temperature', 'top_p', 'top_k', 'typical_p', 'epsilon_cutoff', 'eta_cutoff', 'repetition_penalty', 'encoder_repetition_penalty', 'no_repeat_ngram_size', 'min_length', 'do_sample', 'penalty_alpha', 'num_beams', 'length_penalty', 'early_stopping', 'mirostat_mode', 'mirostat_tau', 'mirostat_eta', 'add_bos_token', 'ban_eos_token', 'truncation_length', 'custom_stopping_strings', 'skip_special_tokens', 'preset_menu', 'stream', 'tfs', 'top_a']
     if chat:

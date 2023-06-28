@@ -16,6 +16,7 @@ from transformers import (
     BitsAndBytesConfig,
     LlamaTokenizer
 )
+from modules.extensions import wrap_method
 
 import modules.shared as shared
 from modules import llama_attn_hijack, sampler_hijack
@@ -44,7 +45,7 @@ if shared.args.deepspeed:
 
 sampler_hijack.hijack_samplers()
 
-
+@wrap_method
 def load_model(model_name, loader=None):
     logger.info(f"Loading {model_name}...")
     t0 = time.time()

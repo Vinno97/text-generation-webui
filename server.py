@@ -308,6 +308,7 @@ def create_chat_settings_menus():
                 shared.gradio['stop_at_newline'] = gr.Checkbox(value=shared.settings['stop_at_newline'], label='Stop generating at new line character')
 
 
+@extensions_module.wrap_method
 def create_settings_menus(default_preset):
     generate_params = presets.load_preset(default_preset)
     with gr.Row():
@@ -1007,16 +1008,11 @@ if __name__ == "__main__":
 
         shared.model_name = available_models[i]
 
-    # If any model has been selected, load it
+    # If any model has been selected, set its parameters
     if shared.model_name != 'None':
         model_settings = get_model_settings_from_yamls(shared.model_name)
         shared.settings.update(model_settings)  # hijacking the interface defaults
         update_model_parameters(model_settings, initial=True)  # hijacking the command-line arguments
-
-        # Load the model
-        shared.model, shared.tokenizer = load_model(shared.model_name)
-        if shared.args.lora:
-            add_lora_to_model(shared.args.lora)
 
     # Force a character to be loaded
     if shared.is_chat():
@@ -1033,6 +1029,14 @@ if __name__ == "__main__":
     shared.generation_lock = Lock()
     # Launch the web UI
     create_interface()
+
+    # If any model has been selected, load it
+    if shared.model_name != 'None':
+        # Load the model
+        shared.model, shared.tokenizer = load_model(shared.model_name)
+        if shared.args.lora:
+            add_lora_to_model(shared.args.lora)
+
     while True:
         time.sleep(0.5)
         if shared.need_restart:
